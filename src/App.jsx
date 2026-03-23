@@ -61,6 +61,27 @@ function getLocalWeaponImage(name) {
   return entry ? entry[1] : "";
 }
 
+// USD to Robux: $1 = 80 Robux, tripled = 240 Robux per $1
+const USD_TO_ROBUX = 240;
+
+function usdToRobux(usd) {
+  return Math.round(usd * USD_TO_ROBUX);
+}
+
+function formatRobux(amount) {
+  return Math.round(amount).toLocaleString("en-US");
+}
+
+// Preset price suggestions in Robux (no decimals)
+const ROBUX_PRESETS = [
+  { label: "3,000 R$", value: 3000 },
+  { label: "5,000 R$", value: 5000 },
+  { label: "10,000 R$", value: 10000 },
+  { label: "25,000 R$", value: 25000 },
+  { label: "50,000 R$", value: 50000 },
+  { label: "100,000 R$", value: 100000 },
+];
+
 const ALL_MM2_ITEMS = [
   "America", "Amerilaser", "Australis", "Bat", "Battleaxe", "Battleaxe2",
   "Batwing", "Bauble", "Bioblade", "Blaster", "Blood", "Bloom", "Blossom",
@@ -91,6 +112,7 @@ const ALL_MM2_ITEMS = [
   "Travelersgun", "Turkey", "Vampiresaxe", "Vampiresedge", "Vampiresgun",
   "Virtual", "Watergun", "Waves", "Wintersedge", "Xmas", "Yellowseer",
 ].sort();
+
 const VERIFIED_MIDDLEMAN = {
   robloxId: "9754148025",
   robloxName: "Middleman",
@@ -99,27 +121,34 @@ const VERIFIED_MIDDLEMAN = {
   completedTrades: 500,
 };
 
+const GAMEPASS_REGEX = /^https:\/\/www\.roblox\.com\/game-pass\/\d+\/[^/]+\/?$/;
+
+function validateGamepassUrl(url) {
+  return GAMEPASS_REGEX.test(url.trim());
+}
+
 export default function MM2MarketplaceMockup() {
+  // askingRobux = luger.gg sale price × 3 × 80 Robux/USD, rounded to whole number
   const items = [
-    { name: "Harvester", category: "Ancient", rarityScore: 10, demand: 9, stability: "Stable", origin: "Halloween Event", stock: 1, seller: "ShadowTrader", valueLabel: "Top Tier", image: "" },
-    { name: "Icepiercer", category: "Ancient", rarityScore: 10, demand: 9, stability: "Stable", origin: "Christmas Event", stock: 1, seller: "FrostVault", valueLabel: "Top Tier", image: "" },
-    { name: "Corrupt", category: "Unique", rarityScore: 10, demand: 10, stability: "Rising", origin: "Classic Event", stock: 1, seller: "VantaShop", valueLabel: "Ultra Rare", image: "" },
-    { name: "Chroma Darkbringer", category: "Chroma", rarityScore: 9, demand: 8, stability: "Stable", origin: "Mystery Box", stock: 1, seller: "PrismSeller", valueLabel: "Elite", image: "" },
-    { name: "Elderwood Scythe", category: "Ancient", rarityScore: 9, demand: 8, stability: "Stable", origin: "Halloween Event", stock: 2, seller: "OakVault", valueLabel: "High Tier", image: "" },
-    { name: "Batwing", category: "Ancient", rarityScore: 8, demand: 7, stability: "Stable", origin: "Halloween Event", stock: 2, seller: "EchoInventory", valueLabel: "Rare", image: "" },
-    { name: "Darkbringer", category: "Godly", rarityScore: 8, demand: 7, stability: "Stable", origin: "Mystery Box", stock: 2, seller: "NightDeals", valueLabel: "High Tier", image: "" },
-    { name: "Lightbringer", category: "Godly", rarityScore: 8, demand: 7, stability: "Stable", origin: "Mystery Box", stock: 2, seller: "GlowTrades", valueLabel: "High Tier", image: "" },
-    { name: "Luger", category: "Godly", rarityScore: 7, demand: 6, stability: "Stable", origin: "Christmas Event", stock: 4, seller: "QuickFlipz", valueLabel: "Mid Tier", image: "" },
-    { name: "Laser", category: "Vintage", rarityScore: 7, demand: 6, stability: "Fluctuating", origin: "Classic", stock: 3, seller: "RetroMM2", valueLabel: "Collector", image: "" },
-    { name: "Gemstone", category: "Godly", rarityScore: 6, demand: 5, stability: "Stable", origin: "Shop", stock: 5, seller: "GemHub", valueLabel: "Mid Tier", image: "" },
-    { name: "Heartblade", category: "Godly", rarityScore: 6, demand: 6, stability: "Rising", origin: "Shop", stock: 6, seller: "PinkVault", valueLabel: "Popular", image: "" },
-    { name: "Seer", category: "Godly", rarityScore: 3, demand: 3, stability: "Stable", origin: "Crafting", stock: 12, seller: "BaseTradez", valueLabel: "Entry Tier", image: "" },
-    { name: "Gingerscope", category: "Ancient", rarityScore: 10, demand: 10, stability: "Rising", origin: "Christmas Event", stock: 1, seller: "ScopeVault", valueLabel: "Elite", image: "" },
-    { name: "Vampire's Axe", category: "Ancient", rarityScore: 9, demand: 9, stability: "Stable", origin: "Halloween Event", stock: 1, seller: "CrimsonDeals", valueLabel: "Top Tier", image: "" },
-    { name: "Swirly Axe", category: "Ancient", rarityScore: 9, demand: 8, stability: "Rising", origin: "Christmas Event", stock: 2, seller: "CandyCore", valueLabel: "Top Tier", image: "" },
-    { name: "Swirly Gun", category: "Godly", rarityScore: 9, demand: 8, stability: "Rising", origin: "Christmas Event", stock: 2, seller: "CandyCore", valueLabel: "Top Tier", image: "" },
-    { name: "Ocean", category: "Godly", rarityScore: 7, demand: 7, stability: "Stable", origin: "Summer Event", stock: 3, seller: "TideStock", valueLabel: "Popular", image: "" },
-    { name: "Blossom", category: "Godly", rarityScore: 8, demand: 8, stability: "Rising", origin: "Spring Event", stock: 2, seller: "PetalVault", valueLabel: "Popular", image: "" },
+    { name: "Harvester", category: "Ancient", rarityScore: 10, demand: 9, stability: "Stable", origin: "Halloween Event", stock: 1, seller: "ShadowTrader", askingRobux: 1788, valueLabel: "", image: "" },
+    { name: "Icepiercer", category: "Ancient", rarityScore: 10, demand: 9, stability: "Stable", origin: "Christmas Event", stock: 1, seller: "FrostVault", askingRobux: 1572, valueLabel: "", image: "" },
+    { name: "Corrupt", category: "Unique", rarityScore: 10, demand: 10, stability: "Rising", origin: "Classic Event", stock: 1, seller: "VantaShop", askingRobux: 7200, valueLabel: "", image: "" },
+    { name: "Chroma Darkbringer", category: "Chroma", rarityScore: 9, demand: 8, stability: "Stable", origin: "Mystery Box", stock: 1, seller: "PrismSeller", askingRobux: 1094, valueLabel: "", image: "" },
+    { name: "Elderwood Scythe", category: "Ancient", rarityScore: 9, demand: 8, stability: "Stable", origin: "Halloween Event", stock: 2, seller: "OakVault", askingRobux: 1366, valueLabel: "", image: "" },
+    { name: "Batwing", category: "Ancient", rarityScore: 8, demand: 7, stability: "Stable", origin: "Halloween Event", stock: 2, seller: "EchoInventory", askingRobux: 545, valueLabel: "", image: "" },
+    { name: "Darkbringer", category: "Godly", rarityScore: 8, demand: 7, stability: "Stable", origin: "Mystery Box", stock: 2, seller: "NightDeals", askingRobux: 274, valueLabel: "", image: "" },
+    { name: "Lightbringer", category: "Godly", rarityScore: 8, demand: 7, stability: "Stable", origin: "Mystery Box", stock: 2, seller: "GlowTrades", askingRobux: 341, valueLabel: "", image: "" },
+    { name: "Luger", category: "Godly", rarityScore: 7, demand: 6, stability: "Stable", origin: "Christmas Event", stock: 4, seller: "QuickFlipz", askingRobux: 362, valueLabel: "", image: "" },
+    { name: "Laser", category: "Vintage", rarityScore: 7, demand: 6, stability: "Fluctuating", origin: "Classic", stock: 3, seller: "RetroMM2", askingRobux: 240, valueLabel: "", image: "" },
+    { name: "Gemstone", category: "Godly", rarityScore: 6, demand: 5, stability: "Stable", origin: "Shop", stock: 5, seller: "GemHub", askingRobux: 202, valueLabel: "", image: "" },
+    { name: "Heartblade", category: "Godly", rarityScore: 6, demand: 6, stability: "Rising", origin: "Shop", stock: 6, seller: "PinkVault", askingRobux: 559, valueLabel: "", image: "" },
+    { name: "Seer", category: "Godly", rarityScore: 3, demand: 3, stability: "Stable", origin: "Crafting", stock: 12, seller: "BaseTradez", askingRobux: 137, valueLabel: "", image: "" },
+    { name: "Gingerscope", category: "Ancient", rarityScore: 10, demand: 10, stability: "Rising", origin: "Christmas Event", stock: 1, seller: "ScopeVault", askingRobux: 2400, valueLabel: "", image: "" },
+    { name: "Vampire's Axe", category: "Ancient", rarityScore: 9, demand: 9, stability: "Stable", origin: "Halloween Event", stock: 1, seller: "CrimsonDeals", askingRobux: 1024, valueLabel: "", image: "" },
+    { name: "Swirly Axe", category: "Ancient", rarityScore: 9, demand: 8, stability: "Rising", origin: "Christmas Event", stock: 2, seller: "CandyCore", askingRobux: 816, valueLabel: "", image: "" },
+    { name: "Swirly Gun", category: "Godly", rarityScore: 9, demand: 8, stability: "Rising", origin: "Christmas Event", stock: 2, seller: "CandyCore", askingRobux: 816, valueLabel: "", image: "" },
+    { name: "Ocean", category: "Godly", rarityScore: 7, demand: 7, stability: "Stable", origin: "Summer Event", stock: 3, seller: "TideStock", askingRobux: 1032, valueLabel: "", image: "" },
+    { name: "Blossom", category: "Godly", rarityScore: 8, demand: 8, stability: "Rising", origin: "Spring Event", stock: 2, seller: "PetalVault", askingRobux: 600, valueLabel: "", image: "" },
   ];
 
   const rarityStyles = {
@@ -149,14 +178,19 @@ export default function MM2MarketplaceMockup() {
   const messagesEndRef = useRef(null);
   const timerRef = useRef(null);
 
+  // Robux price input state (raw number string)
+  const [robuxInput, setRobuxInput] = useState("");
+  const [gamepassError, setGamepassError] = useState("");
+
   const [publishForm, setPublishForm] = useState({
     itemName: ALL_MM2_ITEMS[0],
     quantity: 1,
-    askingValue: "",
+    askingRobux: "",        // stored as integer string e.g. "10000"
     notes: "",
     imageUrl: "",
     agreeToMiddleman: false,
     sellerRobloxName: "",
+    gamepassUrl: "",        // NEW: Roblox gamepass link
   });
 
   const [middlemanRequest, setMiddlemanRequest] = useState({
@@ -273,6 +307,8 @@ export default function MM2MarketplaceMockup() {
       return;
     }
 
+    const robuxAmount = parseInt(publishForm.askingRobux, 10) || 0;
+
     const newListing = {
       name: publishForm.itemName,
       category: "Godly",
@@ -284,7 +320,9 @@ export default function MM2MarketplaceMockup() {
       seller: user.displayName || user.email || "Google User",
       sellerId: user.uid,
       sellerRobloxName: publishForm.sellerRobloxName,
-      valueLabel: publishForm.askingValue || "See Notes",
+      valueLabel: robuxAmount > 0 ? `${formatRobux(robuxAmount)} R$` : "See Notes",
+      askingRobux: robuxAmount,
+      gamepassUrl: publishForm.gamepassUrl,
       notes: publishForm.notes || "",
       image: publishForm.imageUrl || "",
       createdAt: serverTimestamp(),
@@ -296,14 +334,17 @@ export default function MM2MarketplaceMockup() {
       setPublishStep(1);
       setTimerActive(false);
       setConfirmTimer(20);
+      setRobuxInput("");
+      setGamepassError("");
       setPublishForm({
         itemName: ALL_MM2_ITEMS[0],
         quantity: 1,
-        askingValue: "",
+        askingRobux: "",
         notes: "",
         imageUrl: "",
         agreeToMiddleman: false,
         sellerRobloxName: "",
+        gamepassUrl: "",
       });
     } catch (err) {
       console.error(err);
@@ -391,7 +432,26 @@ export default function MM2MarketplaceMockup() {
     setPublishStep(1);
     setTimerActive(false);
     setConfirmTimer(20);
+    setRobuxInput("");
+    setGamepassError("");
   }
+
+  // Handle raw Robux input — strip non-digits, no decimals
+  function handleRobuxInput(raw) {
+    const digits = raw.replace(/[^0-9]/g, "");
+    setRobuxInput(digits);
+    setPublishForm((p) => ({ ...p, askingRobux: digits }));
+  }
+
+  // Step dots/bar indicator for 4 steps
+  const stepColors = [
+    publishStep >= 1 ? "bg-violet-500" : "bg-white/15",
+    publishStep >= 2 ? "bg-violet-500" : "bg-white/15",
+    publishStep >= 3 ? "bg-violet-500" : "bg-white/15",
+    publishStep >= 4 ? "bg-green-500" : "bg-white/15",
+  ];
+
+  const stepLabels = ["Item Info", "Gamepass", "Middleman", "Confirm"];
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white">
@@ -523,7 +583,12 @@ export default function MM2MarketplaceMockup() {
                   </div>
 
                   <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div className="rounded-xl bg-white/5 p-2"><div className="text-white/45">Asking Price</div><div className="font-semibold text-white">{item.valueLabel}</div></div>
+                    <div className="rounded-xl bg-white/5 p-2">
+                      <div className="text-white/45">Price</div>
+                      <div className="font-semibold text-white">
+                        {item.askingRobux ? `${formatRobux(item.askingRobux)} R$` : item.valueLabel}
+                      </div>
+                    </div>
                     <div className="rounded-xl bg-white/5 p-2"><div className="text-white/45">Origin</div><div className="font-semibold text-white">{item.origin}</div></div>
                     <div className="rounded-xl bg-white/5 p-2"><div className="text-white/45">Rarity</div><div className="font-semibold text-white">{item.rarityScore}/10</div></div>
                     <div className="rounded-xl bg-white/5 p-2"><div className="text-white/45">Demand</div><div className="font-semibold text-white">{item.demand}/10</div></div>
@@ -577,7 +642,12 @@ export default function MM2MarketplaceMockup() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div className="rounded-xl bg-white/5 p-3"><div className="text-white/45">Asking Price</div><div className="font-semibold text-white">{selectedItem.valueLabel}</div></div>
+                  <div className="rounded-xl bg-white/5 p-3">
+                    <div className="text-white/45">Price</div>
+                    <div className="font-semibold text-white">
+                      {selectedItem.askingRobux ? `${formatRobux(selectedItem.askingRobux)} R$` : selectedItem.valueLabel}
+                    </div>
+                  </div>
                   <div className="rounded-xl bg-white/5 p-3"><div className="text-white/45">Origin</div><div className="font-semibold text-white">{selectedItem.origin}</div></div>
                   <div className="rounded-xl bg-white/5 p-3"><div className="text-white/45">Rarity Score</div><div className="font-semibold text-white">{selectedItem.rarityScore}/10</div></div>
                   <div className="rounded-xl bg-white/5 p-3"><div className="text-white/45">Demand</div><div className="font-semibold text-white">{selectedItem.demand}/10</div></div>
@@ -656,6 +726,7 @@ export default function MM2MarketplaceMockup() {
           </div>
         </section>
 
+        {/* ── CHAT MODAL ── */}
         {showChat && chatItem && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
             <div className="w-full max-w-lg rounded-3xl border border-white/10 bg-neutral-950 shadow-2xl flex flex-col" style={{ height: "560px" }}>
@@ -723,17 +794,31 @@ export default function MM2MarketplaceMockup() {
           </div>
         )}
 
+        {/* ── PUBLISH MODAL (4 STEPS) ── */}
         {showPublish && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
             <div className="w-full max-w-2xl rounded-3xl border border-white/10 bg-neutral-950 p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
+              {/* Header + step indicator */}
               <div className="mb-5 flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold">Publish Listing</h2>
-                  <div className="flex items-center gap-2 mt-2">
-                    <div className={`h-2 w-10 rounded-full transition-all ${publishStep >= 1 ? "bg-violet-500" : "bg-white/15"}`} />
-                    <div className={`h-2 w-10 rounded-full transition-all ${publishStep >= 2 ? "bg-violet-500" : "bg-white/15"}`} />
-                    <div className={`h-2 w-10 rounded-full transition-all ${publishStep >= 3 ? "bg-green-500" : "bg-white/15"}`} />
-                    <span className="text-xs text-white/40 ml-1">Step {publishStep} of 3</span>
+                  <div className="flex items-center gap-1.5 mt-3">
+                    {stepColors.map((color, i) => (
+                      <div key={i} className="flex items-center gap-1.5">
+                        <div className={`h-2 w-8 rounded-full transition-all duration-300 ${color}`} />
+                        {i < stepColors.length - 1 && <div className="h-px w-2 bg-white/10" />}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-3 mt-2">
+                    {stepLabels.map((label, i) => (
+                      <span
+                        key={i}
+                        className={`text-xs transition-all ${publishStep === i + 1 ? "text-white font-semibold" : "text-white/30"}`}
+                      >
+                        {label}
+                      </span>
+                    ))}
                   </div>
                 </div>
                 <button onClick={closePublish} className="rounded-xl border border-white/10 px-3 py-1 text-sm text-white/75">
@@ -741,6 +826,7 @@ export default function MM2MarketplaceMockup() {
                 </button>
               </div>
 
+              {/* Not signed in */}
               {!user ? (
                 <div className="space-y-3">
                   <div className="rounded-2xl border border-amber-400/20 bg-amber-500/10 p-4 text-sm text-amber-50/85">
@@ -750,9 +836,11 @@ export default function MM2MarketplaceMockup() {
                     Continue with Google
                   </button>
                 </div>
+
+              /* ── STEP 1: Item Info ── */
               ) : publishStep === 1 ? (
                 <div>
-                  <p className="text-sm text-white/50 mb-4">Step 1 — What are you selling?</p>
+                  <p className="text-sm text-white/50 mb-4">Step 1 of 4 — What are you selling?</p>
                   <div className="grid gap-3 md:grid-cols-2">
                     <div className="md:col-span-2">
                       <label className="block text-xs text-white/50 mb-1">Item Name</label>
@@ -775,15 +863,51 @@ export default function MM2MarketplaceMockup() {
                         min="1"
                       />
                     </div>
+
+                    {/* Price in Robux */}
                     <div>
-                      <label className="block text-xs text-white/50 mb-1">Asking Price / Value (optional)</label>
-                      <input
-                        value={publishForm.askingValue}
-                        onChange={(e) => setPublishForm((p) => ({ ...p, askingValue: e.target.value }))}
-                        className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-sm"
-                        placeholder="e.g. 5 Seers, Top Tier"
-                      />
+                      <label className="block text-xs text-white/50 mb-1">
+                        Price (Robux) <span className="text-white/30">— no decimals</span>
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-amber-400">R$</span>
+                        <input
+                          value={robuxInput}
+                          onChange={(e) => handleRobuxInput(e.target.value)}
+                          className="w-full rounded-2xl border border-white/10 bg-black/30 pl-9 pr-4 py-3 text-sm"
+                          placeholder="e.g. 10000"
+                          type="text"
+                          inputMode="numeric"
+                        />
+                      </div>
+                      {robuxInput && (
+                        <p className="text-xs text-white/40 mt-1">
+                          ≈ ${(parseInt(robuxInput, 10) / USD_TO_ROBUX).toFixed(2)} USD
+                          <span className="ml-2 text-white/25">(based on luger.gg / bloxcart.com rates × 3)</span>
+                        </p>
+                      )}
                     </div>
+
+                    {/* Robux preset buttons */}
+                    <div className="md:col-span-2">
+                      <label className="block text-xs text-white/50 mb-2">Quick price presets</label>
+                      <div className="flex flex-wrap gap-2">
+                        {ROBUX_PRESETS.map((preset) => (
+                          <button
+                            key={preset.value}
+                            onClick={() => { setRobuxInput(String(preset.value)); setPublishForm((p) => ({ ...p, askingRobux: String(preset.value) })); }}
+                            className={`rounded-xl border px-3 py-1.5 text-xs font-semibold transition-all ${
+                              parseInt(robuxInput, 10) === preset.value
+                                ? "border-amber-400/60 bg-amber-500/20 text-amber-300"
+                                : "border-white/10 bg-black/30 text-white/60 hover:border-white/25 hover:text-white/80"
+                            }`}
+                          >
+                            {preset.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
                     <div className="md:col-span-2">
                       <label className="block text-xs text-white/50 mb-1">Image URL (optional)</label>
                       <input
@@ -805,16 +929,105 @@ export default function MM2MarketplaceMockup() {
                   </div>
                   <div className="mt-4 flex gap-2">
                     <button onClick={() => setPublishStep(2)} className="flex-1 rounded-2xl bg-violet-500 px-4 py-3 font-semibold text-white">
-                      Next: Middleman Agreement →
+                      Next: Verify Gamepass →
                     </button>
                     <button onClick={closePublish} className="rounded-2xl border border-white/10 px-4 py-3 text-white/80">
                       Cancel
                     </button>
                   </div>
                 </div>
+
+              /* ── STEP 2 (NEW): Gamepass Verification ── */
               ) : publishStep === 2 ? (
                 <div>
-                  <p className="text-sm text-white/50 mb-4">Step 2 — Do you trust this middleman?</p>
+                  <p className="text-sm text-white/50 mb-4">Step 2 of 4 — Verify your Roblox gamepass</p>
+
+                  <div className="rounded-2xl border border-violet-400/20 bg-violet-500/10 p-4 mb-5 text-sm text-violet-100/80">
+                    <div className="font-semibold text-white mb-1">Why do we need this?</div>
+                    To keep the marketplace safe and scam-free, all sellers must link a valid Roblox gamepass. This verifies you're a real Roblox user and helps buyers trust your listing.
+                  </div>
+
+                  <div className="rounded-2xl border border-white/10 bg-black/25 p-4 mb-4">
+                    <label className="block text-xs text-white/50 mb-2">Roblox Gamepass URL</label>
+                    <input
+                      value={publishForm.gamepassUrl}
+                      onChange={(e) => {
+                        setPublishForm((p) => ({ ...p, gamepassUrl: e.target.value }));
+                        setGamepassError("");
+                      }}
+                      className={`w-full rounded-2xl border px-4 py-3 text-sm bg-black/30 outline-none transition-all ${
+                        gamepassError
+                          ? "border-red-400/60"
+                          : publishForm.gamepassUrl && validateGamepassUrl(publishForm.gamepassUrl)
+                          ? "border-green-400/60"
+                          : "border-white/10"
+                      }`}
+                      placeholder="https://www.roblox.com/game-pass/248568521/unnamed"
+                    />
+                    {gamepassError && (
+                      <p className="text-xs text-red-400 mt-2">{gamepassError}</p>
+                    )}
+                    {!gamepassError && publishForm.gamepassUrl && validateGamepassUrl(publishForm.gamepassUrl) && (
+                      <p className="text-xs text-green-400 mt-2">✓ Valid gamepass URL</p>
+                    )}
+                    <p className="text-xs text-white/35 mt-2">
+                      Format: <span className="text-white/50">https://www.roblox.com/game-pass/[ID]/[name]</span>
+                    </p>
+                  </div>
+
+                  {/* How to find your gamepass */}
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4 mb-5 text-sm space-y-2">
+                    <div className="font-semibold text-white mb-2">How to find your gamepass link</div>
+                    <div className="flex items-start gap-2 text-white/65">
+                      <span className="text-violet-400 font-bold mt-0.5">1.</span>
+                      <span>Go to <span className="text-white">roblox.com</span> and open any game you own a gamepass for</span>
+                    </div>
+                    <div className="flex items-start gap-2 text-white/65">
+                      <span className="text-violet-400 font-bold mt-0.5">2.</span>
+                      <span>Click the <span className="text-white">Store</span> tab and find one of your gamepasses</span>
+                    </div>
+                    <div className="flex items-start gap-2 text-white/65">
+                      <span className="text-violet-400 font-bold mt-0.5">3.</span>
+                      <span>Copy the URL from your browser — it should look like the example above</span>
+                    </div>
+                    <a
+                      href="https://www.roblox.com/develop?View=3"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block mt-1 text-xs text-blue-400 hover:text-blue-300 underline"
+                    >
+                      Open Roblox Developer Portal to find your gamepasses →
+                    </a>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button onClick={() => setPublishStep(1)} className="rounded-2xl border border-white/10 px-4 py-3 text-white/80">
+                      ← Back
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (!publishForm.gamepassUrl.trim()) {
+                          setGamepassError("Please enter your Roblox gamepass URL to continue.");
+                          return;
+                        }
+                        if (!validateGamepassUrl(publishForm.gamepassUrl)) {
+                          setGamepassError("That doesn't look like a valid Roblox gamepass URL. Please check the format and try again.");
+                          return;
+                        }
+                        setGamepassError("");
+                        setPublishStep(3);
+                      }}
+                      className="flex-1 rounded-2xl bg-violet-500 px-4 py-3 font-semibold text-white hover:bg-violet-600"
+                    >
+                      Gamepass Verified → Next
+                    </button>
+                  </div>
+                </div>
+
+              /* ── STEP 3 (was 2): Middleman Agreement ── */
+              ) : publishStep === 3 ? (
+                <div>
+                  <p className="text-sm text-white/50 mb-4">Step 3 of 4 — Do you trust this middleman?</p>
 
                   <div className="rounded-2xl border border-green-400/30 bg-green-500/10 p-5 mb-4">
                     <div className="flex items-center gap-4 mb-4">
@@ -870,7 +1083,7 @@ export default function MM2MarketplaceMockup() {
                   </div>
 
                   <div className="flex gap-2">
-                    <button onClick={() => setPublishStep(1)} className="rounded-2xl border border-white/10 px-4 py-3 text-white/80">
+                    <button onClick={() => setPublishStep(2)} className="rounded-2xl border border-white/10 px-4 py-3 text-white/80">
                       ← Back
                     </button>
                     <button
@@ -879,7 +1092,7 @@ export default function MM2MarketplaceMockup() {
                           alert("You must confirm you trust the middleman to continue.");
                           return;
                         }
-                        setPublishStep(3);
+                        setPublishStep(4);
                       }}
                       className="flex-1 rounded-2xl bg-violet-500 px-4 py-3 font-semibold text-white hover:bg-violet-600"
                     >
@@ -887,9 +1100,11 @@ export default function MM2MarketplaceMockup() {
                     </button>
                   </div>
                 </div>
+
+              /* ── STEP 4 (was 3): Add Middleman + Confirm ── */
               ) : (
                 <div>
-                  <p className="text-sm text-white/50 mb-4">Step 3 — Add the middleman on Roblox so they know to expect you.</p>
+                  <p className="text-sm text-white/50 mb-4">Step 4 of 4 — Add the middleman on Roblox so they know to expect you.</p>
 
                   <div className="rounded-2xl border border-white/10 bg-black/25 p-4 mb-4">
                     <label className="block text-xs text-white/50 mb-2">Your Roblox Username</label>
@@ -944,7 +1159,7 @@ export default function MM2MarketplaceMockup() {
                   )}
 
                   <div className="flex gap-2">
-                    <button onClick={() => setPublishStep(2)} className="rounded-2xl border border-white/10 px-4 py-3 text-white/80">
+                    <button onClick={() => setPublishStep(3)} className="rounded-2xl border border-white/10 px-4 py-3 text-white/80">
                       ← Back
                     </button>
                     <button
@@ -975,6 +1190,7 @@ export default function MM2MarketplaceMockup() {
           </div>
         )}
 
+        {/* ── MIDDLEMAN MODAL ── */}
         {showMiddlemanModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
             <div className="w-full max-w-2xl rounded-3xl border border-white/10 bg-neutral-950 p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
@@ -1072,6 +1288,7 @@ export default function MM2MarketplaceMockup() {
           </div>
         )}
 
+        {/* ── TOS MODAL ── */}
         {showTOS && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
             <div className="w-full max-w-2xl rounded-3xl border border-white/10 bg-neutral-950 p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
