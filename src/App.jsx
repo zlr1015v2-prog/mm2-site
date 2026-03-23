@@ -128,27 +128,26 @@ function validateGamepassUrl(url) {
 }
 
 export default function MM2MarketplaceMockup() {
-  // askingRobux = luger.gg sale price × 3 × 80 Robux/USD, rounded to whole number
   const items = [
-    { name: "Harvester", category: "Ancient", rarityScore: 10, demand: 9, stability: "Stable", origin: "Halloween Event", stock: 1, seller: "ShadowTrader", askingRobux: 1788, valueLabel: "", image: "" },
-    { name: "Icepiercer", category: "Ancient", rarityScore: 10, demand: 9, stability: "Stable", origin: "Christmas Event", stock: 1, seller: "FrostVault", askingRobux: 1572, valueLabel: "", image: "" },
-    { name: "Corrupt", category: "Unique", rarityScore: 10, demand: 10, stability: "Rising", origin: "Classic Event", stock: 1, seller: "VantaShop", askingRobux: 7200, valueLabel: "", image: "" },
-    { name: "Chroma Darkbringer", category: "Chroma", rarityScore: 9, demand: 8, stability: "Stable", origin: "Mystery Box", stock: 1, seller: "PrismSeller", askingRobux: 1094, valueLabel: "", image: "" },
-    { name: "Elderwood Scythe", category: "Ancient", rarityScore: 9, demand: 8, stability: "Stable", origin: "Halloween Event", stock: 2, seller: "OakVault", askingRobux: 1366, valueLabel: "", image: "" },
-    { name: "Batwing", category: "Ancient", rarityScore: 8, demand: 7, stability: "Stable", origin: "Halloween Event", stock: 2, seller: "EchoInventory", askingRobux: 545, valueLabel: "", image: "" },
-    { name: "Darkbringer", category: "Godly", rarityScore: 8, demand: 7, stability: "Stable", origin: "Mystery Box", stock: 2, seller: "NightDeals", askingRobux: 274, valueLabel: "", image: "" },
-    { name: "Lightbringer", category: "Godly", rarityScore: 8, demand: 7, stability: "Stable", origin: "Mystery Box", stock: 2, seller: "GlowTrades", askingRobux: 341, valueLabel: "", image: "" },
-    { name: "Luger", category: "Godly", rarityScore: 7, demand: 6, stability: "Stable", origin: "Christmas Event", stock: 4, seller: "QuickFlipz", askingRobux: 362, valueLabel: "", image: "" },
-    { name: "Laser", category: "Vintage", rarityScore: 7, demand: 6, stability: "Fluctuating", origin: "Classic", stock: 3, seller: "RetroMM2", askingRobux: 240, valueLabel: "", image: "" },
-    { name: "Gemstone", category: "Godly", rarityScore: 6, demand: 5, stability: "Stable", origin: "Shop", stock: 5, seller: "GemHub", askingRobux: 202, valueLabel: "", image: "" },
-    { name: "Heartblade", category: "Godly", rarityScore: 6, demand: 6, stability: "Rising", origin: "Shop", stock: 6, seller: "PinkVault", askingRobux: 559, valueLabel: "", image: "" },
-    { name: "Seer", category: "Godly", rarityScore: 3, demand: 3, stability: "Stable", origin: "Crafting", stock: 12, seller: "BaseTradez", askingRobux: 137, valueLabel: "", image: "" },
-    { name: "Gingerscope", category: "Ancient", rarityScore: 10, demand: 10, stability: "Rising", origin: "Christmas Event", stock: 1, seller: "ScopeVault", askingRobux: 2400, valueLabel: "", image: "" },
-    { name: "Vampire's Axe", category: "Ancient", rarityScore: 9, demand: 9, stability: "Stable", origin: "Halloween Event", stock: 1, seller: "CrimsonDeals", askingRobux: 1024, valueLabel: "", image: "" },
-    { name: "Swirly Axe", category: "Ancient", rarityScore: 9, demand: 8, stability: "Rising", origin: "Christmas Event", stock: 2, seller: "CandyCore", askingRobux: 816, valueLabel: "", image: "" },
-    { name: "Swirly Gun", category: "Godly", rarityScore: 9, demand: 8, stability: "Rising", origin: "Christmas Event", stock: 2, seller: "CandyCore", askingRobux: 816, valueLabel: "", image: "" },
-    { name: "Ocean", category: "Godly", rarityScore: 7, demand: 7, stability: "Stable", origin: "Summer Event", stock: 3, seller: "TideStock", askingRobux: 1032, valueLabel: "", image: "" },
-    { name: "Blossom", category: "Godly", rarityScore: 8, demand: 8, stability: "Rising", origin: "Spring Event", stock: 2, seller: "PetalVault", askingRobux: 600, valueLabel: "", image: "" },
+    { name: "Harvester", category: "Ancient", rarityScore: 10, demand: 9, stability: "Stable", origin: "Halloween Event", stock: 24, seller: "ShadowTrader", askingRobux: 3000, valueLabel: "", image: "" },
+    { name: "Icepiercer", category: "Ancient", rarityScore: 10, demand: 9, stability: "Stable", origin: "Christmas Event", stock: 24, seller: "FrostVault", askingRobux: 2500, valueLabel: "", image: "" },
+    { name: "Corrupt", category: "Unique", rarityScore: 10, demand: 10, stability: "Rising", origin: "Classic Event", stock: 7, seller: "VantaShop", askingRobux: 6000, valueLabel: "", image: "" },
+    { name: "Chroma Darkbringer", category: "Chroma", rarityScore: 9, demand: 8, stability: "Stable", origin: "Mystery Box", stock: 24, seller: "PrismSeller", askingRobux: 1094, valueLabel: "", image: "" },
+    { name: "Elderwood Scythe", category: "Ancient", rarityScore: 9, demand: 8, stability: "Stable", origin: "Halloween Event", stock: 24, seller: "OakVault", askingRobux: 1366, valueLabel: "", image: "" },
+    { name: "Batwing", category: "Ancient", rarityScore: 8, demand: 7, stability: "Stable", origin: "Halloween Event", stock: 24, seller: "EchoInventory", askingRobux: 545, valueLabel: "", image: "" },
+    { name: "Darkbringer", category: "Godly", rarityScore: 8, demand: 7, stability: "Stable", origin: "Mystery Box", stock: 24, seller: "NightDeals", askingRobux: 274, valueLabel: "", image: "" },
+    { name: "Lightbringer", category: "Godly", rarityScore: 8, demand: 7, stability: "Stable", origin: "Mystery Box", stock: 24, seller: "GlowTrades", askingRobux: 341, valueLabel: "", image: "" },
+    { name: "Luger", category: "Godly", rarityScore: 7, demand: 6, stability: "Stable", origin: "Christmas Event", stock: 48, seller: "QuickFlipz", askingRobux: 362, valueLabel: "", image: "" },
+    { name: "Laser", category: "Vintage", rarityScore: 7, demand: 6, stability: "Fluctuating", origin: "Classic", stock: 36, seller: "RetroMM2", askingRobux: 240, valueLabel: "", image: "" },
+    { name: "Gemstone", category: "Godly", rarityScore: 6, demand: 5, stability: "Stable", origin: "Shop", stock: 60, seller: "GemHub", askingRobux: 202, valueLabel: "", image: "" },
+    { name: "Heartblade", category: "Godly", rarityScore: 6, demand: 6, stability: "Rising", origin: "Shop", stock: 72, seller: "PinkVault", askingRobux: 559, valueLabel: "", image: "" },
+    { name: "Seer", category: "Godly", rarityScore: 3, demand: 3, stability: "Stable", origin: "Crafting", stock: 144, seller: "BaseTradez", askingRobux: 137, valueLabel: "", image: "" },
+    { name: "Gingerscope", category: "Ancient", rarityScore: 10, demand: 10, stability: "Rising", origin: "Christmas Event", stock: 3, seller: "ScopeVault", askingRobux: 100000, valueLabel: "", image: "" },
+    { name: "Vampire's Axe", category: "Ancient", rarityScore: 9, demand: 9, stability: "Stable", origin: "Halloween Event", stock: 12, seller: "CrimsonDeals", askingRobux: 1024, valueLabel: "", image: "" },
+    { name: "Swirly Axe", category: "Ancient", rarityScore: 9, demand: 8, stability: "Rising", origin: "Christmas Event", stock: 24, seller: "CandyCore", askingRobux: 816, valueLabel: "", image: "" },
+    { name: "Swirly Gun", category: "Godly", rarityScore: 9, demand: 8, stability: "Rising", origin: "Christmas Event", stock: 24, seller: "CandyCore", askingRobux: 816, valueLabel: "", image: "" },
+    { name: "Ocean", category: "Godly", rarityScore: 7, demand: 7, stability: "Stable", origin: "Summer Event", stock: 36, seller: "TideStock", askingRobux: 1032, valueLabel: "", image: "" },
+    { name: "Blossom", category: "Godly", rarityScore: 8, demand: 8, stability: "Rising", origin: "Spring Event", stock: 24, seller: "PetalVault", askingRobux: 600, valueLabel: "", image: "" },
   ];
 
   const rarityStyles = {
@@ -603,11 +602,11 @@ export default function MM2MarketplaceMockup() {
                   ) : null}
 
                   <div className="mt-4 flex gap-2">
-                    <button onClick={() => openChat(item)} className="flex-1 rounded-2xl bg-white px-4 py-2.5 text-sm font-semibold text-black transition hover:opacity-90">
-                      Message Seller
-                    </button>
-                    <button onClick={() => { setSelectedItem(item); setShowMiddlemanModal(true); }} className="rounded-2xl border border-green-400/50 px-4 py-2.5 text-sm text-green-300 hover:bg-green-400/10">
-                      Safe Trade
+                    <button
+                      onClick={() => { setSelectedItem(item); setShowMiddlemanModal(true); }}
+                      className="flex-1 rounded-2xl bg-green-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-green-700"
+                    >
+                      🤝 Middleman Requested
                     </button>
                   </div>
                 </div>
